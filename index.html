@@ -25,3 +25,142 @@
   <p>Bu benim ilk GitHub Pages sitem!</p>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mila Sohbet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #6200ea;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    #messages {
+      height: 400px;
+      overflow-y: scroll;
+      border: 1px solid #ddd;
+      margin: 20px;
+      padding: 10px;
+      background: white;
+    }
+    .msg {
+      padding: 6px;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    .msg span {
+      font-weight: bold;
+      color: #6200ea;
+    }
+    #chatBox {
+      display: flex;
+      margin: 20px;
+    }
+    #name, #message {
+      flex: 1;
+      padding: 10px;
+      margin-right: 5px;
+    }
+    button {
+      background: #6200ea;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4500a0;
+    }
+    nav {
+      background: #eee;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #6200ea;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💬 Mila Sohbet</h1>
+  </header>
+
+  <nav>
+    <a href="#">Sohbet</a>
+    <a href="#">Arkadaş Ekle</a>
+    <a href="#">Hakkımda</a>
+    <a href="#">İletişim</a>
+  </nav>
+
+  <div id="messages"></div>
+
+  <div id="chatBox">
+    <input type="text" id="name" placeholder="Adınız">
+    <input type="text" id="message" placeholder="Mesaj yazın...">
+    <button onclick="sendMessage()">Gönder</button>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    // Firebase kütüphanesi
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } 
+      from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    // 🔹 Örnek config (bunu kendi Firebase config ile değiştir!)
+    const firebaseConfig = {
+      apiKey: "AIzaSyExample",
+      authDomain: "mila-chat.firebaseapp.com",
+      projectId: "mila-chat",
+      storageBucket: "mila-chat.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
+
+    // Firebase başlat
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Mesajları dinle
+    const messagesDiv = document.getElementById("messages");
+    const q = query(collection(db, "messages"), orderBy("time", "asc"));
+    onSnapshot(q, (snapshot) => {
+      messagesDiv.innerHTML = "";
+      snapshot.forEach((doc) => {
+        let data = doc.data();
+        messagesDiv.innerHTML += `<div class="msg"><span>${data.name}:</span> ${data.text}</div>`;
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    // Mesaj gönder
+    async function sendMessage() {
+      const name = document.getElementById("name").value;
+      const text = document.getElementById("message").value;
+      if (name && text) {
+        await addDoc(collection(db, "messages"), {
+          name,
+          text,
+          time: Date.now()
+        });
+        document.getElementById("message").value = "";
+      }
+    }
+
+    window.sendMessage = sendMessage;
+  </script>
+</body>
+</html>
