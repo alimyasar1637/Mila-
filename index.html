@@ -994,4 +994,185 @@
   <input type="password" id="password" placeholder="Şifre">
   <button onclick="login()">Giriş Yap</button>
   <button onclick="register()">Kayıt Ol</button>
-</div>
+</div>import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+
+export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    // Burada backend'e bağlanıp giriş yapacağız
+    console.log("Giriş yap:", email, password);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Text style={styles.title}>Mila</Text>
+
+        <TextInput
+          placeholder="E-posta veya Kullanıcı Adı"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+        />
+
+        <TextInput
+          placeholder="Şifre"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Giriş Yap</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.link}>Hesabın yok mu? Kayıt Ol</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => console.log("Şifremi unuttum")}>
+          <Text style={styles.linkSecondary}>Şifremi Unuttum</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  card: {
+    width: "85%",
+    padding: 20,
+    borderRadius: 15,
+    backgroundColor: "#f9f9f9",
+    elevation: 5, // Android gölge
+    shadowColor: "#000", // iOS gölge
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: "#fff",
+  },
+  button: {
+    backgroundColor: "#4a90e2",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    text
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+
+export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    // Burada backend'e bağlanıp giriş yapacağız
+    console.log("Giriş yap:", email, password);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Text style={styles.title}>Mila</Text>
+
+        <TextInput
+          placeholder="E-posta veya Kullanıcı Adı"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+        />
+
+        <TextInput
+          placeholder="Şifre"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Giriş Yap</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.link}>Hesabın yok mu? Kayıt Ol</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => console.log("Şifremi unuttum")}>
+          <Text style={styles.linkSecondary}>Şifremi Unuttum</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  card: {
+    width: "85%",
+    padding: 20,
+    borderRadius: 15,
+    backgroundColor: "#f9f9f9",
+    elevation: 5, // Android gölge
+    shadowColor: "#000", // iOS gölge
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: "#fff",
+  },
+  button: {
+    backgroundColor: "#4a90e2",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    text
+
+
