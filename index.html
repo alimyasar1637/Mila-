@@ -27,6 +27,85 @@
 </html>
 <!DOCTYPE html>
 <html lang="tr">
+  <!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mila Sohbet</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f7f7f7; }
+    header { background:#6200ea; color:#fff; padding:15px; text-align:center; }
+    nav { background:#eee; padding:10px; text-align:center; }
+    nav a { margin:0 10px; text-decoration:none; color:#6200ea; font-weight:bold; }
+    #messages { height:400px; overflow-y:auto; margin:20px; padding:10px; background:white; border:1px solid #ddd; }
+    .msg { padding:6px; border-bottom:1px solid #eee; }
+    .msg span { font-weight:bold; color:#6200ea; }
+    #chatBox { display:flex; margin:20px; }
+    #name, #message { flex:1; padding:10px; margin-right:5px; }
+    button { background:#6200ea; color:white; border:none; padding:10px 15px; cursor:pointer; }
+    button:hover { background:#4500a0; }
+  </style>
+</head>
+<body>
+  <header><h1>💬 Mila Sohbet</h1></header>
+
+  <nav>
+    <a href="index.html">Sohbet</a>
+    <a href="friends.html">Arkadaş Ekle</a>
+    <a href="about.html">Hakkımda</a>
+    <a href="contact.html">İletişim</a>
+  </nav>
+
+  <div id="messages"></div>
+  <div id="chatBox">
+    <input type="text" id="name" placeholder="Adınız">
+    <input type="text" id="message" placeholder="Mesaj yazın...">
+    <button onclick="sendMessage()">Gönder</button>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } 
+      from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "DEĞİŞTİR",
+      authDomain: "DEĞİŞTİR",
+      projectId: "DEĞİŞTİR",
+      storageBucket: "DEĞİŞTİR",
+      messagingSenderId: "DEĞİŞTİR",
+      appId: "DEĞİŞTİR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const messagesDiv = document.getElementById("messages");
+    const q = query(collection(db, "messages"), orderBy("time", "asc"));
+    onSnapshot(q, (snapshot) => {
+      messagesDiv.innerHTML = "";
+      snapshot.forEach((doc) => {
+        let data = doc.data();
+        messagesDiv.innerHTML += `<div class="msg"><span>${data.name}:</span> ${data.text}</div>`;
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    async function sendMessage() {
+      const name = document.getElementById("name").value;
+      const text = document.getElementById("message").value;
+      if (name && text) {
+        await addDoc(collection(db, "messages"), { name, text, time: Date.now() });
+        document.getElementById("message").value = "";
+      }
+    }
+    window.sendMessage = sendMessage;
+  </script>
+</body>
+</html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
