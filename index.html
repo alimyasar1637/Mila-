@@ -32,6 +32,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mila Sohbet - Giriş</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f2f6fc; display:flex; justify-content:center; align-items:center; height:100vh; }
+    .login-box { background:white; padding:30px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.15); width:300px; text-align:center; }
+    .login-box h2 { margin-bottom:20px; color:#1976d2; }
+    .login-box input { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px; }
+    .login-box button { width:100%; padding:10px; background:#1976d2; color:white; border:none; border-radius:5px; cursor:pointer; }
+    .login-box button:hover { background:#0d47a1; }
+    #chatScreen { display:none; flex-direction:column; width:100%; height:100vh; }
+    
+    header { background:#1976d2; color:#fff; padding:15px; text-align:center; }
+    nav { background:#1565c0; padding:10px; text-align:center; }
+    nav a { margin:0 15px; text-decoration:none; color:#fff; font-weight:bold; }
+    nav a:hover { text-decoration:underline; }
+    
+    #messages { flex:1; overflow-y:auto; margin:20px auto; padding:15px; background:white; border-radius:10px; width:90%; max-width:600px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    .msg { margin:8px 0; padding:10px; border-radius:10px; max-width:70%; clear:both; }
+    .me { background:#1976d2; color:white; float:right; }
+    .other { background:#e3f2fd; float:left; }
+    
+    #chatBox { display:flex; justify-content:center; margin:20px; gap:10px; }
+    #message { flex:1; padding:10px; border:1px solid #ccc; border-radius:5px; }
+  </style>
+</head>
+<body>
+
+  <!-- Giriş Kutusu -->
+  <div class="login-box" id="loginBox">
+    <h2>🔐 Mila Sohbet</h2>
+    <input type="text" id="username" placeholder="Kullanıcı Adı">
+    <input type="password" id="password" placeholder="Şifre">
+    <button onclick="login()">Giriş Yap</button>
+  </div>
+
+  <!-- Sohbet Ekranı -->
+  <div id="chatScreen">
+    <header><h1>💬 Mila Sohbet</h1></header>
+    <nav>
+      <a href="index.html">Sohbet</a>
+      <a href="friends.html">Arkadaş Ekle</a>
+      <a href="about.html">Hakkımda</a>
+      <a href="contact.html">İletişim</a>
+    </nav>
+
+    <div id="messages"></div>
+    <div id="chatBox">
+      <input type="text" id="message" placeholder="Mesaj yazın...">
+      <button onclick="sendMessage()">Gönder</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } 
+      from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "DEĞİŞTİR",
+      authDomain: "DEĞİŞTİR",
+      projectId: "DEĞİŞTİR",
+      storageBucket: "DEĞİŞTİR",
+      messagingSenderId: "DEĞİŞTİR",
+      appId: "DEĞİŞTİR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentUser = "";
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if(username && password){ 
+        currentUser = username;
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("chatScreen").style.display="flex";
+      } else {
+        alert("Lütfen kullanıcı adı ve şifre girin!");
+      }
+    }
+    window.login = login;
+
+    const messagesDiv = document.getElementById("messages");
+    const q = query(collection(db, "messages"), orderBy("time", "asc"));
+    onSnapshot(q, (snapshot) => {
+      messagesDiv.innerHTML = "";
+      snapshot.forEach((doc) => {
+        let data = doc.data();
+        let side = (data.name === currentUser) ? "me" : "other";
+        messagesDiv.innerHTML += `<div class="msg ${side}"><b>${data.name}:</b> ${data.text}</div>`;
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    async function sendMessage() {
+      const text = document.getElementById("message").value;
+      if (currentUser && text) {
+        await addDoc(collection(db, "messages"), { name: currentUser, text, time: Date.now() });
+        document.getElementById("message").value = "";
+      }
+    }
+    window.sendMessage = sendMessage;
+  </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mila Sohbet</title>
   <style>
     body { font-family: Arial, sans-serif; margin:0; background:#f2f6fc; }
